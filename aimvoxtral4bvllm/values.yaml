@@ -1,0 +1,54 @@
+image:
+  repository: vllm/vllm-omni
+  tag: "v0.18.0"
+  pullPolicy: IfNotPresent
+nginx:
+  image: nginx:alpine
+replicaCount: 1
+revisionHistoryLimit: 1
+apiPort: 8000
+dashboardPort: 8080
+strategy:
+  type: Recreate
+resources:
+  limits:
+    cpu: "8"
+    memory: 16Gi
+    nvidia.com/gpu: "1"
+    nvidia.com/gpumem: "1024"
+  requests:
+    cpu: "2"
+    memory: 8Gi
+nginxResources:
+  limits:
+    cpu: 200m
+    memory: 64Mi
+  requests:
+    cpu: 50m
+    memory: 32Mi
+env:
+  MODEL_NAME: mistralai/Voxtral-4B-TTS-2603
+  MODEL_ALIAS: voxtral-tts-4b
+  HF_HOME: /models/huggingface
+volumes:
+  dshm:
+    sizeLimit: 2Gi
+startupProbe:
+  httpGet:
+    path: /health
+    port: 8000
+  failureThreshold: 40
+  periodSeconds: 15
+  timeoutSeconds: 5
+livenessProbe:
+  httpGet:
+    path: /health
+    port: 8000
+  initialDelaySeconds: 120
+  periodSeconds: 30
+  timeoutSeconds: 15
+  failureThreshold: 5
+userspace:
+  appData: /olares/rootfs/userspace/pvc-userspace-aimighty-phbiddku99qy4cuz
+service:
+  type: ClusterIP

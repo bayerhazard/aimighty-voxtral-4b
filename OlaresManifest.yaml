@@ -1,0 +1,44 @@
+metadata:
+  name: aimvoxtral4bvllm
+  version: 1.0.0
+  icon: https://raw.githubusercontent.com/bayerhazard/aimighty-voxtral-4b/main/icon.png
+  title: AIM Voxtral 4B TTS HQ
+  description: Mistral Voxtral-4B-TTS via vLLM-Omni — 1 GiB KV-Cache, 10.9 GB VRAM
+  fullDescription: "Mistral Voxtral 4B TTS served via vLLM-Omni with optimized resource usage. BF16 precision with 1 GiB KV-Cache reduces VRAM to 10.9 GB (vs 20.5 GB default). OpenAI-compatible /v1/audio/speech API, 20 voices, 10 languages, 24 kHz audio output. Includes Web Dashboard for easy testing."
+  upgradeDescription: "v1.0.0: Initial release — vLLM-Omni with optimized KV-Cache (1 GiB), 10.9 GB VRAM, Web Dashboard."
+  categories:
+    - AI
+    - Developer Tools
+  developer: Aimighty
+  supportArch:
+    - amd64
+  requiredCpu: "2"
+  limitedCpu: "8"
+  requiredMemory: 8Gi
+  limitedMemory: 16Gi
+  requiredDisk: 20Gi
+  limitedDisk: 30Gi
+  requiredGpu: 1Gi
+  limitedGpu: 24Gi
+  apiTimeout: 0
+  allowMultipleInstall: false
+spec:
+  type: app
+  entrance:
+    - name: aimvoxtral4bvllm
+      title: TTS HQ Dashboard
+      port: 8080
+      host: aimvoxtral4bvllm
+      authLevel: internal
+      invisible: false
+      openMethod: window
+  permission: []
+  middleware: []
+  options:
+    resources:
+      cpu: "8"
+      memory: 16Gi
+      disk: 20Gi
+  dependencies:
+    - name: olares
+      version: ">=1.12.3-0"

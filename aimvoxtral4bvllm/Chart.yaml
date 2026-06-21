@@ -1,0 +1,20 @@
+apiVersion: v2
+name: aimvoxtral4bvllm
+description: AIM Voxtral 4B TTS HQ — Mistral Voxtral-4B-TTS via vLLM-Omni, optimized resource usage
+type: application
+version: 1.0.0
+appVersion: "1.0.0"
+keywords:
+  - ai
+  - tts
+  - text-to-speech
+  - voxtral
+  - mistral
+  - nvidia
+  - vllm
+home: https://github.com/bayerhazard/aimighty-voxtral-4b
+sources:
+  - https://github.com/bayerhazard/aimighty-voxtral-4b
+maintainers:
+  - name: Aimighty
+    email: marc@aimighty.de
