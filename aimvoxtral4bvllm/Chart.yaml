@@ -2,8 +2,8 @@ apiVersion: v2
 name: aimvoxtral4bvllm
 description: AIM Voxtral 4B TTS HQ — Mistral Voxtral-4B-TTS via vLLM-Omni, optimized resource usage
 type: application
-version: 1.0.0
-appVersion: "1.0.0"
+version: 1.0.1
+appVersion: "1.0.1"
 keywords:
   - ai
   - tts

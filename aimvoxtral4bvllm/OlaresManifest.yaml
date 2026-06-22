@@ -8,7 +8,7 @@ metadata:
   icon: https://raw.githubusercontent.com/bayerhazard/aimighty-voxtral-4b/main/icon.png
   description: Mistral Voxtral 4B TTS via vLLM-Omni — 1 GiB KV-Cache, 10.9 GB VRAM
   title: AIM Voxtral 4B TTS HQ
-  version: '1.0.0'
+  version: '1.0.1'
   categories:
     - AI
     - Developer Tools
@@ -21,8 +21,9 @@ entrances:
     openMethod: window
     authLevel: internal
 spec:
-  versionName: '1.0.0'
+  versionName: '1.0.1'
   upgradeDescription: |
+    v1.0.1: Fixed OlaresManifest schema (appid, type, entrances), added openMethod: window.
     v1.0.0: Initial release — vLLM-Omni with optimized KV-Cache (1 GiB), 10.9 GB VRAM, Web Dashboard.
   fullDescription: |
     **Voxtral-4B-TTS** — Mistral's frontier text-to-speech model, served via vLLM-Omni with optimized resource usage.
