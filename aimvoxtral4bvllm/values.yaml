@@ -5,6 +5,11 @@ image:
 nginx:
   image: nginx:alpine
 replicaCount: 1
+
+workloads:
+  aimvoxtral4bvllm:
+    replicaCount: 1
+
 revisionHistoryLimit: 1
 apiPort: 8000
 dashboardPort: 8080
@@ -30,6 +35,12 @@ env:
   MODEL_NAME: mistralai/Voxtral-4B-TTS-2603
   MODEL_ALIAS: voxtral-tts-4b
   HF_HOME: /models/huggingface
+
+# Olares-injected environment variables (from OlaresManifest envs:).
+# Default present so standalone `helm template` renders without nil pointer;
+# Olares overrides this at install time.
+olaresEnv:
+  HF_TOKEN: ""
 volumes:
   dshm:
     sizeLimit: 2Gi

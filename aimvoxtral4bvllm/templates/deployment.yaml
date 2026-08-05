@@ -245,7 +245,7 @@ metadata:
     applications.app.bytetrade.io/owner: {{ .Release.Namespace | trimSuffix "-aimighty" }}
     applications.app.bytetrade.io/raw-app-name: aimvoxtral4bvllm
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: {{ .Values.workloads.aimvoxtral4bvllm.replicaCount }}
   revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
   selector:
     matchLabels:
@@ -292,6 +292,8 @@ spec:
           - "--max-num-seqs"
           - "1"
         env:
+          - name: HF_TOKEN
+            value: {{ .Values.olaresEnv.HF_TOKEN | default "" | quote }}
           - name: HF_HOME
             value: {{ .Values.env.HF_HOME | quote }}
           - name: PYTORCH_CUDA_ALLOC_CONF
