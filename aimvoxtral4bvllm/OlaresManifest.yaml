@@ -12,7 +12,7 @@ metadata:
   icon: https://raw.githubusercontent.com/bayerhazard/aimighty-voxtral-4b/main/icon.png
   description: Mistral Voxtral 4B TTS via vLLM-Omni — 3 GiB KV-Cache, ~12 GB VRAM
   title: AIM Voxtral 4B TTS HQ
-  version: '1.2.1'
+  version: '1.2.2'
   categories:
     - AI
     - Developer Tools
@@ -27,8 +27,14 @@ entrances:
     authLevel: internal
 
 spec:
-  versionName: '1.2.1'
+  versionName: '1.2.2'
   upgradeDescription: |
+    v1.2.2: Revert engine to v0.18.0. v0.24.0 regressed the Voxtral audio path
+    (garbled/unintelligible audio at the backend even on direct calls - the
+    refactored codes["audio"]/per-request cfg_alpha path is broken). v0.18.0
+    produces perfect audio (verified by ear). The LiteLLM audio/mpeg fix stays
+    as the WAV->MP3 transcode sidecar (engine-independent). Outbound model name
+    tts-voxtral unchanged.
     v1.2.1: Engine update v0.18.0 -> v0.24.0 (the Olares registry mirror does not
     carry v0.24.1; v0.24.0 is already cached on the nodes and validated). Serving
     via deploy-config (--deploy-config, stages) with max_cudagraph_capture_size 4 +
