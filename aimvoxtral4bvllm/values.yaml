@@ -20,7 +20,6 @@ resources:
     cpu: "8"
     memory: 16Gi
     nvidia.com/gpu: "1"
-    nvidia.com/gpumem: "1024"
   requests:
     cpu: "2"
     memory: 8Gi
