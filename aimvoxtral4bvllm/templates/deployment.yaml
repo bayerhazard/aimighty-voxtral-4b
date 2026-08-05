@@ -23,6 +23,10 @@ data:
         server 127.0.0.1:{{ .Values.apiPort }};
       }
 
+      upstream tts_transcode {
+        server 127.0.0.1:{{ .Values.transcodePort }};
+      }
+
       server {
         listen {{ .Values.dashboardPort }};
         server_name _;
@@ -31,6 +35,17 @@ data:
           root /usr/share/nginx/html;
           index index.html;
           try_files $uri $uri/ /index.html;
+        }
+
+        location /v1/audio/speech {
+          proxy_pass http://tts_transcode;
+          proxy_set_header Host $host;
+          proxy_set_header X-Real-IP $remote_addr;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header X-Forwarded-Proto $scheme;
+          proxy_read_timeout 300s;
+          proxy_send_timeout 300s;
+          proxy_connect_timeout 30s;
         }
 
         location /v1/ {
@@ -344,6 +359,68 @@ data:
           to: 1
           window_size: -1
 ---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: aimvoxtral4bvllm-transcode
+  namespace: {{ .Release.Namespace }}
+data:
+  tts-transcode.py: |
+    #!/usr/bin/env python3
+    # TTS WAV -> MP3 transcode proxy.
+    # vLLM-Omni Voxtral returns 24kHz WAV, but LiteLLM hardcodes
+    # Content-Type: audio/mpeg for OpenAI TTS backends. Re-encode to real MP3
+    # so the client/browser decodes correctly.
+    import subprocess
+    import urllib.request
+    from http.server import BaseHTTPRequestHandler, HTTPServer
+
+    BACKEND = "http://127.0.0.1:{{ .Values.apiPort }}"
+
+    class Handler(BaseHTTPRequestHandler):
+        def do_POST(self):
+            if self.path != "/v1/audio/speech":
+                self.send_error(404)
+                return
+            length = int(self.headers.get("Content-Length", 0) or 0)
+            body = self.rfile.read(length)
+            req = urllib.request.Request(
+                BACKEND + "/v1/audio/speech",
+                data=body,
+                headers={"Content-Type": self.headers.get("Content-Type", "application/json")},
+                method="POST",
+            )
+            try:
+                with urllib.request.urlopen(req, timeout=300) as resp:
+                    wav = resp.read()
+            except Exception:
+                self.send_error(502)
+                return
+            proc = subprocess.run(
+                ["ffmpeg", "-loglevel", "error", "-i", "-",
+                 "-c:a", "libmp3lame", "-b:a", "128k", "-f", "mp3", "-"],
+                input=wav, capture_output=True,
+            )
+            if proc.returncode == 0 and proc.stdout:
+                self.send_response(200)
+                self.send_header("Content-Type", "audio/mpeg")
+                self.send_header("Content-Length", str(len(proc.stdout)))
+                self.end_headers()
+                self.wfile.write(proc.stdout)
+            else:
+                # fallback: pass the original WAV through
+                self.send_response(200)
+                self.send_header("Content-Type", "audio/wav")
+                self.send_header("Content-Length", str(len(wav)))
+                self.end_headers()
+                self.wfile.write(wav)
+
+        def log_message(self, fmt, *args):
+            pass
+
+    if __name__ == "__main__":
+        HTTPServer(("0.0.0.0", {{ .Values.transcodePort }}), Handler).serve_forever()
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -436,6 +513,25 @@ spec:
           - name: dashboard-html
             mountPath: /usr/share/nginx/html
 
+      # Container 3: WAV -> MP3 transcode proxy for /v1/audio/speech
+      # (LiteLLM declares audio/mpeg; vLLM-Omni serves WAV)
+      - name: tts-transcode
+        image: "{{ .Values.transcode.image }}"
+        imagePullPolicy: IfNotPresent
+        command:
+          - "sh"
+          - "-c"
+          - "apk add --no-cache ffmpeg >/dev/null 2>&1; python /opt/tts-transcode.py"
+        ports:
+          - containerPort: {{ .Values.transcodePort }}
+            name: transcode
+        resources:
+            {{- toYaml .Values.transcode.resources | nindent 10 }}
+        volumeMounts:
+          - name: transcode-script
+            mountPath: /opt/tts-transcode.py
+            subPath: tts-transcode.py
+
       volumes:
         - name: models
           hostPath:
@@ -460,6 +556,12 @@ spec:
             items:
               - key: voxtral_tts.yaml
                 path: voxtral_tts.yaml
+        - name: transcode-script
+          configMap:
+            name: aimvoxtral4bvllm-transcode
+            items:
+              - key: tts-transcode.py
+                path: tts-transcode.py
 ---
 apiVersion: v1
 kind: Service

@@ -4,6 +4,16 @@ image:
   pullPolicy: IfNotPresent
 nginx:
   image: nginx:alpine
+
+transcode:
+  image: python:3.12-alpine
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
 replicaCount: 1
 
 workloads:
@@ -13,6 +23,7 @@ workloads:
 revisionHistoryLimit: 1
 apiPort: 8000
 dashboardPort: 8080
+transcodePort: 8010
 strategy:
   type: Recreate
 resources:
