@@ -279,9 +279,9 @@ spec:
           - "--download-dir"
           - "/models"
           - "--kv-cache-memory-bytes"
-          - "1073741824"
+          - "3221225472"
           - "--max-model-len"
-          - "512"
+          - "8192"
           - "--max-num-seqs"
           - "1"
         env:
