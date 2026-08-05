@@ -241,9 +241,6 @@ metadata:
   namespace: {{ .Release.Namespace }}
   labels:
     app: aimvoxtral4bvllm
-    applications.app.bytetrade.io/name: aimvoxtral4bvllm
-    applications.app.bytetrade.io/owner: {{ .Release.Namespace | trimSuffix "-aimighty" }}
-    applications.app.bytetrade.io/raw-app-name: aimvoxtral4bvllm
 spec:
   replicas: {{ .Values.workloads.aimvoxtral4bvllm.replicaCount }}
   revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
@@ -256,10 +253,6 @@ spec:
     metadata:
       labels:
         app: aimvoxtral4bvllm
-        applications.app.bytetrade.io/name: aimvoxtral4bvllm
-        applications.app.bytetrade.io/owner: {{ .Release.Namespace | trimSuffix "-aimighty" }}
-        applications.app.bytetrade.io/raw-app-name: aimvoxtral4bvllm
-        io.bytetrade.app: "true"
     spec:
       containers:
       # Container 1: vLLM-Omni TTS API
