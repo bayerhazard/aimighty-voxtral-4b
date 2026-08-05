@@ -268,22 +268,10 @@ spec:
           - "0.0.0.0"
           - "--port"
           - "8000"
-          - "--tokenizer-mode"
-          - "mistral"
-          - "--config-format"
-          - "mistral"
-          - "--load-format"
-          - "mistral"
           - "--omni"
           - "--trust-remote-code"
           - "--download-dir"
           - "/models"
-          - "--kv-cache-memory-bytes"
-          - "3221225472"
-          - "--max-model-len"
-          - "8192"
-          - "--max-num-seqs"
-          - "1"
         env:
           - name: HF_TOKEN
             value: {{ .Values.olaresEnv.HF_TOKEN | default "" | quote }}
