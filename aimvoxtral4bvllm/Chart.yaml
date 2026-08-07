@@ -1,9 +1,9 @@
 apiVersion: v2
 name: aimvoxtral4bvllm
-description: AIM Voxtral 4B TTS HQ — Mistral Voxtral-4B-TTS via vLLM-Omni, optimized resource usage
+description: Voxtral 4B TTS via vLLM-Omni — 20 voices, 10 languages, 24 kHz, OpenAI-compatible API
 type: application
-version: 1.3.1
-appVersion: "1.2.2"
+version: 26.08.1
+appVersion: "26.08.1"
 keywords:
   - ai
   - tts

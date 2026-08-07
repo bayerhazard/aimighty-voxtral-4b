@@ -10,25 +10,25 @@ metadata:
   name: aimvoxtral4bvllm
   appid: aimvoxtral4bvllm
   icon: https://raw.githubusercontent.com/bayerhazard/aimighty-voxtral-4b/main/icon.png
-  description: Mistral Voxtral 4B TTS via vLLM-Omni — 3 GiB KV-Cache, ~12 GB VRAM
-  title: AIM Voxtral 4B TTS HQ
-  version: '1.3.1'
+  description: Voxtral 4B TTS via vLLM-Omni — 20 voices, 10 languages, 24 kHz, OpenAI-compatible API
+  title: AIM Voxtral 4B TTS
+  version: '26.08.1'
   categories:
-    - AI
-    - Developer Tools
+    - Audio
 
 entrances:
   - name: aimvoxtral4bvllm
     port: 8080
     host: aimvoxtral4bvllm
-    title: TTS HQ Dashboard
+    title: AIM Voxtral 4B TTS
     icon: https://raw.githubusercontent.com/bayerhazard/aimighty-voxtral-4b/main/icon.png
     openMethod: window
     authLevel: internal
 
 spec:
-  versionName: '1.3.1'
+  versionName: '26.08.1'
   upgradeDescription: |
+    v26.08.1: Unified naming — title "AIM Voxtral 4B TTS" (HQ/engine removed), category Audio, English descriptions. Built for Olares 1.12.6.
     v1.3.1: Dashboard restyled to the Rewind design (Hanseatenblau + gold accent), German default with DE/EN toggle, discrete model footer, removed API URL line.
     v1.3.0: VRAM co-residency fix — cap engine at GPU_MEMORY_UTILIZATION=0.45 + --kv-cache-memory-bytes 1GiB (was default 0.9, ~19.3 GiB, starving co-resident apps on the 24 GB worker GPU). TTS now ~11 GiB; runs alongside Voxtral Mini 3B ASR / Realtime with ~3-9 GiB headroom.
     v1.2.2: Revert engine to v0.18.0. v0.24.0 regressed the Voxtral audio path
