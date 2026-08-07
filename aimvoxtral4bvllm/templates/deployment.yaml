@@ -73,72 +73,447 @@ data:
     }
   index.html: |
     <!DOCTYPE html>
-    <html lang="en">
+    <html lang="de">
     <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Voxtral TTS HQ</title>
-      <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-          background: #0f0f0f; color: #e0e0e0; min-height: 100vh;
-          display: flex; align-items: center; justify-content: center;
-        }
-        .container {
-          width: 100%; max-width: 640px; padding: 2rem;
-        }
-        h1 {
-          font-size: 1.5rem; font-weight: 600; margin-bottom: 0.25rem;
-          background: linear-gradient(135deg, #6366f1, #8b5cf6);
-          -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        }
-        .subtitle { color: #888; font-size: 0.85rem; margin-bottom: 1.5rem; }
-        textarea {
-          width: 100%; height: 120px; padding: 0.75rem; border-radius: 8px;
-          border: 1px solid #333; background: #1a1a1a; color: #e0e0e0;
-          font-size: 0.95rem; resize: vertical; outline: none;
-          transition: border-color 0.2s;
-        }
-        textarea:focus { border-color: #6366f1; }
-        .controls {
-          display: flex; gap: 0.75rem; margin-top: 1rem; align-items: center;
-        }
-        select {
-          flex: 1; padding: 0.6rem 0.75rem; border-radius: 8px;
-          border: 1px solid #333; background: #1a1a1a; color: #e0e0e0;
-          font-size: 0.9rem; outline: none; cursor: pointer;
-        }
-        select:focus { border-color: #6366f1; }
-        button {
-          padding: 0.6rem 1.5rem; border-radius: 8px; border: none;
-          background: linear-gradient(135deg, #6366f1, #8b5cf6);
-          color: #fff; font-size: 0.9rem; font-weight: 500;
-          cursor: pointer; transition: opacity 0.2s; white-space: nowrap;
-        }
-        button:hover { opacity: 0.9; }
-        button:disabled { opacity: 0.5; cursor: not-allowed; }
-        .status {
-          margin-top: 1rem; font-size: 0.85rem; color: #888;
-          min-height: 1.5rem;
-        }
-        .status.error { color: #ef4444; }
-        .status.success { color: #22c55e; }
-        audio {
-          width: 100%; margin-top: 1rem; border-radius: 8px;
-        }
-        .health {
-          margin-top: 2rem; padding: 0.75rem; border-radius: 8px;
-          background: #1a1a1a; border: 1px solid #333;
-          font-size: 0.8rem; color: #888;
-        }
-        .health span { color: #22c55e; }
-      </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AIM Voxtral 4B TTS HQ — Dashboard</title>
+    <style>
+    /* ============================================================
+       AIM Voxtral-4B TTS HQ Dashboard
+       Design-Sprache: Rewind (Hanseatenblau + Gold-Akzent)
+       ============================================================ */
+    :root{
+      /* Surface-Scale (Navy) */
+      --b-25:#000714; --b-50:#010e1d; --b-100:#041120; --b-150:#081a2e;
+      --b-200:#10243c; --b-300:#1d3a5c; --b-400:#2f5178;
+      --b-500:#4a6c95; --b-600:#708bab; --b-700:#9bafc6;
+      --b-800:#c6d2e0; --b-900:#e6ebf1;
+    
+      /* Signal — ein Akzent (AImighty-Gold) */
+      --gold:#c9a45c; --gold-hell:#d5b371; --gold-tief:#b28b42;
+      --marke:var(--gold); --marke-hell:var(--gold-hell); --marke-tief:var(--gold-tief);
+      --auf-marke:var(--b-25);
+    
+      --bg:var(--b-50);
+      --surface:var(--b-100);
+      --surface2:var(--b-150);
+      --border:var(--b-300);
+      --border-soft:var(--b-200);
+      --text:var(--b-800);
+      --text-stark:#fff;
+      --text-dim:var(--b-500);
+      --accent:var(--marke);
+      --accent-hover:var(--marke-hell);
+    
+      --success:#4ade80; --success-bg:color-mix(in oklab, #4ade80 12%, transparent);
+      --warning:#fbbf24; --warning-bg:color-mix(in oklab, #fbbf24 12%, transparent);
+      --error:#f87171;  --error-bg:color-mix(in oklab, #f87171 12%, transparent);
+      --info-bg:color-mix(in oklab, var(--marke) 12%, transparent);
+    
+      --marke-flaeche:color-mix(in oklab, var(--marke) 12%, transparent);
+      --marke-rand:color-mix(in oklab, var(--marke) 44%, transparent);
+    
+      --fokus:var(--marke-hell);
+    
+      --schrift:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+      --mono:ui-monospace,'SF Mono','Fira Code',Menlo,Consolas,monospace;
+    
+      --radius:8px;
+      --seite:clamp(1rem, 3.5vw, 2.5rem);
+      --inhalt:60rem;
+    }
+    
+    *{margin:0;padding:0;box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+    
+    body{
+      font-family:var(--schrift);
+      background:
+        radial-gradient(1200px 600px at 80% -10%, color-mix(in oklab, var(--marke) 9%, transparent), transparent 60%),
+        radial-gradient(900px 500px at -10% 110%, color-mix(in oklab, var(--marke) 5%, transparent), transparent 55%),
+        var(--bg);
+      color:var(--text);
+      line-height:1.6;
+      min-height:100vh;
+      -webkit-font-smoothing:antialiased;
+      text-rendering:optimizeLegibility;
+    }
+    
+    :focus-visible{outline:2px solid var(--fokus);outline-offset:2px;border-radius:4px}
+    
+    .container{width:min(100% - var(--seite)*2, var(--inhalt));margin-inline:auto;padding-block:24px}
+    
+    /* Mikro-Label (Kicker-Pattern) */
+    .kicker{
+      display:inline-flex;align-items:center;gap:.55rem;
+      font-family:var(--mono);font-size:.68rem;font-weight:600;
+      letter-spacing:.18em;text-transform:uppercase;
+      color:var(--marke);margin-bottom:1.1rem;
+    }
+    .kicker::before{content:"";inline-size:1.4rem;block-size:1px;background:var(--marke-rand);display:block}
+    
+    /* Kopfzeile */
+    .header{
+      display:flex;align-items:center;justify-content:space-between;gap:1rem;
+      margin-bottom:1.75rem;padding-block:.25rem 1rem;
+      border-bottom:1px solid var(--border-soft);
+    }
+    .header h1{
+      font-size:clamp(1.4rem, 1.1rem + 1vw, 1.7rem);
+      font-weight:700;letter-spacing:-.02em;color:var(--text-stark);line-height:1.1;
+    }
+    .header h1::first-letter{color:var(--marke)}
+    .header .subtitle{font-size:.82rem;color:var(--text-dim);margin-top:.15rem}
+    
+    /* Sprachumschalter */
+    .lang-toggle{
+      display:inline-flex;gap:2px;background:var(--surface);border:1px solid var(--border-soft);
+      border-radius:6px;padding:2px;flex-shrink:0;
+    }
+    .lang-toggle button{
+      border:none;background:transparent;color:var(--text-dim);
+      font-family:var(--mono);font-size:.68rem;font-weight:600;letter-spacing:.1em;
+      padding:.3rem .6rem;border-radius:4px;cursor:pointer;transition:all .16s ease;
+    }
+    .lang-toggle button:hover{color:var(--text-stark)}
+    .lang-toggle button.active{background:var(--marke);color:var(--auf-marke)}
+    
+    /* Karten */
+    .card{
+      background:linear-gradient(180deg, var(--surface), var(--b-100));
+      border:1px solid var(--border-soft);
+      border-radius:var(--radius);
+      padding:1.1rem 1.2rem;
+      margin-bottom:16px;
+    }
+    .card-title{
+      font-size:.95rem;font-weight:600;color:var(--text-stark);
+      margin-bottom:14px;display:flex;align-items:center;gap:8px;
+    }
+    .card-title .icon{font-size:1.05rem;color:var(--marke)}
+    
+    /* Textarea */
+    textarea{
+      width:100%;min-height:130px;padding:.75rem .85rem;border-radius:6px;
+      border:1px solid var(--border);background:var(--surface2);color:var(--text);
+      font-family:var(--schrift);font-size:.95rem;line-height:1.6;resize:vertical;outline:none;
+    }
+    textarea:focus{border-color:var(--marke)}
+    textarea::placeholder{color:var(--text-dim)}
+    
+    /* Controls */
+    .controls{display:flex;gap:.75rem;margin-top:1rem;align-items:center}
+    select{
+      flex:1;padding:.55rem .7rem;border-radius:6px;
+      border:1px solid var(--border);background:var(--surface2);color:var(--text);
+      font-size:.9rem;outline:none;cursor:pointer;font-family:var(--schrift);
+    }
+    select:focus{border-color:var(--marke)}
+    select option{background:var(--surface)}
+    
+    /* Buttons */
+    .btn{
+      display:inline-flex;align-items:center;justify-content:center;gap:.5rem;
+      block-size:2.5rem;padding-inline:1.1rem;
+      border:1px solid var(--border);border-radius:6px;
+      background:var(--surface2);color:var(--text);
+      font-family:var(--schrift);font-size:.85rem;font-weight:600;line-height:1;
+      white-space:nowrap;cursor:pointer;user-select:none;
+      transition:background-color .16s ease,border-color .16s ease,color .16s ease;
+    }
+    .btn:hover{border-color:var(--marke-rand);background:var(--marke-flaeche);color:var(--text-stark)}
+    .btn.primary{background:var(--marke);border-color:var(--marke);color:var(--auf-marke)}
+    .btn.primary:hover{background:var(--marke-hell);border-color:var(--marke-hell)}
+    .btn:disabled{opacity:.5;cursor:not-allowed;pointer-events:none}
+    
+    /* Audio */
+    .audio-wrap{
+      margin-top:1rem;padding:.9rem 1rem;border-radius:var(--radius);
+      background:var(--b-25);border:1px solid var(--border-soft);display:none;
+    }
+    .audio-wrap.show{display:block;animation:fade .3s ease}
+    @keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1}}
+    .audio-wrap audio{width:100%;height:42px;border-radius:6px}
+    .audio-wrap .size{
+      margin-top:.4rem;font-size:.72rem;color:var(--text-dim);font-family:var(--mono);
+    }
+    
+    /* Status */
+    .status{margin-top:1rem;font-size:.85rem;color:var(--text-dim);min-height:1.5rem;display:flex;align-items:center;gap:8px}
+    .status.error{color:var(--error)}
+    .status.success{color:var(--success)}
+    .spinner{
+      display:inline-block;width:14px;height:14px;
+      border:2px solid var(--border);border-top-color:var(--marke);
+      border-radius:50%;animation:spin .8s linear infinite;
+    }
+    @keyframes spin{to{transform:rotate(360deg)}}
+    
+    /* Info-Grid */
+    .info-grid{display:grid;grid-template-columns:repeat(auto-fit, minmax(150px, 1fr));gap:.75rem}
+    .info-item{background:var(--b-25);border:1px solid var(--border-soft);border-radius:6px;padding:.7rem .8rem}
+    .info-item .k{
+      font-size:.64rem;color:var(--text-dim);text-transform:uppercase;
+      letter-spacing:.14em;font-family:var(--mono);font-weight:600;margin-bottom:.25rem;
+    }
+    .info-item .v{font-size:.85rem;color:var(--text-stark);font-weight:500}
+    
+    /* Health + Footer */
+    .foot{
+      margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--border-soft);
+      display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;
+      font-size:.74rem;color:var(--text-dim);font-family:var(--mono);
+    }
+    .foot .health{display:inline-flex;align-items:center;gap:6px}
+    .foot .health .ok{color:var(--success)}
+    .foot .health .bad{color:var(--error)}
+    .foot .cfg{display:flex;gap:14px;flex-wrap:wrap}
+    .foot .cfg span{white-space:nowrap}
+    .foot .cfg b{color:var(--text);font-weight:600}
+    
+    @media (max-width:600px){
+      .header{flex-direction:column;gap:12px;align-items:flex-start}
+      .controls{flex-wrap:wrap}
+      .controls select{flex:none;width:100%}
+      .btn{flex:1}
+    }
+    
+    ::-webkit-scrollbar{width:8px;height:8px}
+    ::-webkit-scrollbar-track{background:transparent}
+    ::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
+    ::-webkit-scrollbar-thumb:hover{background:var(--text-dim)}
+    
+    .hidden{display:none !important}
+    
+    @media (prefers-reduced-motion:reduce){
+      *{animation:none !important;transition:none !important}
+    }
+    </style>
     </head>
     <body>
-      <div class="container">
-        <h1>AIM Voxtral 4B TTS HQ</h1>
-        <p class="subtitle">Mistral Voxtral via vLLM-Omni — 20 voices, 10 languages, 1 GiB KV-Cache</p>
+    <div class="container">
+    
+      <div class="header">
+        <div>
+          <h1>Voxtral 4B TTS HQ</h1>
+          <div class="subtitle" data-i18n="subtitle">Mistral Voxtral via vLLM-Omni — 20 Stimmen, 10 Sprachen, 24 kHz</div>
+        </div>
+        <div class="lang-toggle" role="group" aria-label="Sprache">
+          <button type="button" id="langDE" class="active">DE</button>
+          <button type="button" id="langEN">EN</button>
+        </div>
+      </div>
+    
+      <span class="kicker" data-i18n="kicker">Textsynthese</span>
+    
+      <!-- Karte 1: Synthese -->
+      <div class="card">
+        <div class="card-title"><span class="icon">●</span><span data-i18n="ttsTitle">Synthese</span></div>
+        <textarea id="textInput" data-i18n-ph="ttsPlaceholder">Hallo, das ist ein Test der Voxtral-Sprachsynthese.</textarea>
+        <div class="controls">
+          <select id="voiceSelect" aria-label="Stimme">
+            <option value="neutral_female">EN — neutral_female</option>
+            <option value="neutral_male">EN — neutral_male</option>
+            <option value="cheerful_female">EN — cheerful_female</option>
+            <option value="casual_female">EN — casual_female</option>
+            <option value="casual_male">EN — casual_male</option>
+            <option value="de_female">DE — de_female</option>
+            <option value="de_male">DE — de_male</option>
+            <option value="fr_female">FR — fr_female</option>
+            <option value="fr_male">FR — fr_male</option>
+            <option value="es_female">ES — es_female</option>
+            <option value="es_male">ES — es_male</option>
+            <option value="it_female">IT — it_female</option>
+            <option value="it_male">IT — it_male</option>
+            <option value="pt_female">PT — pt_female</option>
+            <option value="pt_male">PT — pt_male</option>
+            <option value="nl_female">NL — nl_female</option>
+            <option value="nl_male">NL — nl_male</option>
+            <option value="ar_female">AR — ar_female</option>
+            <option value="ar_male">AR — ar_male</option>
+            <option value="hi_female">HI — hi_female</option>
+            <option value="hi_male">HI — hi_male</option>
+          </select>
+          <button class="btn primary" id="generateBtn" data-i18n="genBtn">Synthese starten</button>
+        </div>
+        <div class="hint" style="color:var(--text-dim);font-size:.78rem;margin-top:.5rem" data-i18n="ttsHint">OpenAI-kompatibler Endpoint — Audio wird als WAV zurückgegeben.</div>
+      </div>
+    
+      <!-- Karte 2: Service -->
+      <div class="card">
+        <div class="card-title"><span class="icon">▤</span><span data-i18n="svcTitle">Service</span></div>
+        <div class="info-grid">
+          <div class="info-item"><div class="k" data-i18n="svcEngine">Engine</div><div class="v">vLLM-Omni v0.24.0</div></div>
+          <div class="info-item"><div class="k" data-i18n="svcApi">API</div><div class="v">POST /v1/audio/speech</div></div>
+          <div class="info-item"><div class="k" data-i18n="svcVoices">Stimmen</div><div class="v">20</div></div>
+          <div class="info-item"><div class="k" data-i18n="svcFmt">Format</div><div class="v">24 kHz WAV</div></div>
+        </div>
+      </div>
+    
+      <div class="status" id="status"></div>
+      <div class="audio-wrap" id="audioWrap">
+        <audio id="player" controls></audio>
+        <div class="size" id="audioSize"></div>
+      </div>
+    
+      <div class="foot">
+        <div class="health" id="healthInfo"><span data-i18n="healthChecking">Status wird geprüft…</span></div>
+        <div class="cfg">
+          <span><b data-i18n="cfgModel">Modell</b>: voxtral-tts-4b</span>
+        </div>
+      </div>
+    </div>
+    
+    <script>
+    /* ===== i18n DE/EN ===== */
+    const I18N = {
+      de: {
+        subtitle: 'Mistral Voxtral via vLLM-Omni — 20 Stimmen, 10 Sprachen, 24 kHz',
+        kicker: 'Textsynthese',
+        ttsTitle: 'Synthese',
+        ttsPlaceholder: 'Text zum Sprechen eingeben…',
+        ttsHint: 'OpenAI-kompatibler Endpoint — Audio wird als WAV zurückgegeben.',
+        svcTitle: 'Service',
+        svcEngine: 'Engine',
+        svcApi: 'API',
+        svcVoices: 'Stimmen',
+        svcFmt: 'Format',
+        genBtn: 'Synthese starten',
+        genBtnBusy: 'Synthese läuft…',
+        healthChecking: 'Status wird geprüft…',
+        healthOk: 'Bereit',
+        healthBad: 'Nicht erreichbar',
+        cfgModel: 'Modell',
+        errNoText: 'Bitte zuerst Text eingeben.',
+        generating: 'Audio wird erzeugt…',
+        done: 'Fertig',
+        size: 'Größe',
+        emptyAudio: '(leeres Audio)',
+      },
+      en: {
+        subtitle: 'Mistral Voxtral via vLLM-Omni — 20 voices, 10 languages, 24 kHz',
+        kicker: 'Text Synthesis',
+        ttsTitle: 'Synthesis',
+        ttsPlaceholder: 'Enter text to synthesize…',
+        ttsHint: 'OpenAI-compatible endpoint — audio is returned as WAV.',
+        svcTitle: 'Service',
+        svcEngine: 'Engine',
+        svcApi: 'API',
+        svcVoices: 'Voices',
+        svcFmt: 'Format',
+        genBtn: 'Generate speech',
+        genBtnBusy: 'Generating…',
+        healthChecking: 'Checking status…',
+        healthOk: 'Ready',
+        healthBad: 'Unreachable',
+        cfgModel: 'Model',
+        errNoText: 'Please enter some text first.',
+        generating: 'Generating audio…',
+        done: 'Done',
+        size: 'Size',
+        emptyAudio: '(empty audio)',
+      }
+    };
+    
+    let LANG = 'de';
+    
+    function applyLang() {
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (I18N[LANG][key]) el.textContent = I18N[LANG][key];
+      });
+      document.querySelectorAll('[data-i18n-ph]').forEach(el => {
+        const key = el.getAttribute('data-i18n-ph');
+        if (I18N[LANG][key]) el.placeholder = I18N[LANG][key];
+      });
+      document.getElementById('langDE').classList.toggle('active', LANG === 'de');
+      document.getElementById('langEN').classList.toggle('active', LANG === 'en');
+      document.documentElement.lang = LANG === 'de' ? 'de' : 'en';
+    }
+    document.getElementById('langDE').addEventListener('click', () => { LANG = 'de'; applyLang(); });
+    document.getElementById('langEN').addEventListener('click', () => { LANG = 'en'; applyLang(); });
+    applyLang();
+    
+    /* ===== API-Basis ===== */
+    const API_URL = window.location.origin + '/v1/audio/speech';
+    
+    /* ===== Elemente ===== */
+    const statusEl = document.getElementById('status');
+    const audioWrap = document.getElementById('audioWrap');
+    const player = document.getElementById('player');
+    const audioSize = document.getElementById('audioSize');
+    const textInput = document.getElementById('textInput');
+    const voiceSelect = document.getElementById('voiceSelect');
+    const generateBtn = document.getElementById('generateBtn');
+    
+    function setStatus(cls, msg) {
+      statusEl.className = 'status' + (cls ? ' ' + cls : '');
+      statusEl.textContent = msg;
+    }
+    function setLoading(msg) {
+      statusEl.className = 'status';
+      statusEl.innerHTML = '<span class="spinner"></span>' + msg;
+    }
+    
+    /* ===== Health ===== */
+    async function checkHealth() {
+      try {
+        const res = await fetch('/health');
+        await res.json();
+        document.getElementById('healthInfo').innerHTML =
+          '<span class="ok">●</span> <span>' + I18N[LANG].healthOk + '</span>';
+      } catch (e) {
+        document.getElementById('healthInfo').innerHTML =
+          '<span class="bad">●</span> <span>' + I18N[LANG].healthBad + '</span>';
+      }
+    }
+    
+    /* ===== Synthese ===== */
+    async function generateSpeech() {
+      const text = textInput.value.trim();
+      const voice = voiceSelect.value;
+      if (!text) { setStatus('error', I18N[LANG].errNoText); return; }
+    
+      generateBtn.disabled = true;
+      generateBtn.textContent = I18N[LANG].genBtnBusy;
+      audioWrap.classList.remove('show');
+      setLoading(I18N[LANG].generating);
+    
+      try {
+        const res = await fetch(API_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ model: 'voxtral-tts-4b', input: text, voice: voice })
+        });
+        if (!res.ok) {
+          const err = await res.json().catch(() => ({}));
+          throw new Error(err.detail || err.message || ('HTTP ' + res.status));
+        }
+        const blob = await res.blob();
+        if (blob.size === 0) { setStatus('error', I18N[LANG].emptyAudio); return; }
+        player.src = URL.createObjectURL(blob);
+        audioSize.textContent = I18N[LANG].size + ': ' + (blob.size / 1024).toFixed(0) + ' KB';
+        audioWrap.classList.add('show');
+        player.play().catch(() => {});
+        setStatus('success', I18N[LANG].done);
+      } catch (e) {
+        setStatus('error', 'Error: ' + e.message);
+      } finally {
+        generateBtn.disabled = false;
+        generateBtn.textContent = I18N[LANG].genBtn;
+      }
+    }
+    
+    generateBtn.addEventListener('click', generateSpeech);
+    
+    checkHealth();
+    setInterval(checkHealth, 30000);
+    </script>
+    </body>
+    </html>
+    
 
         <textarea id="textInput" placeholder="Enter text to synthesize...">Hello, this is a test of Voxtral text-to-speech.</textarea>
 
