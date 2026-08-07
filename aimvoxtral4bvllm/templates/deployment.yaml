@@ -844,9 +844,9 @@ spec:
           - "--stage-configs-path"
           - "/etc/vllm-omni/voxtral_tts.yaml"
           - "--gpu-memory-utilization"
-          - "0.45"
+          - "0.52"
           - "--kv-cache-memory-bytes"
-          - "1073741824"
+          - "3221225472"
         env:
           - name: HF_TOKEN
             value: {{ .Values.olaresEnv.HF_TOKEN | default "" | quote }}
