@@ -12,7 +12,7 @@ metadata:
   icon: https://raw.githubusercontent.com/bayerhazard/aimighty-voxtral-4b/main/icon.png
   description: Voxtral 4B TTS via vLLM-Omni — 20 voices, 10 languages, 24 kHz, OpenAI-compatible API
   title: AIM Voxtral 4B TTS
-  version: '26.08.2'
+  version: '26.08.3'
   categories:
     - Audio
 
@@ -26,7 +26,7 @@ entrances:
     authLevel: internal
 
 spec:
-  versionName: '26.08.2'
+  versionName: '26.08.3'
   upgradeDescription: |
     v1.3.1: Dashboard restyled to the Rewind design (Hanseatenblau + gold accent), German default with DE/EN toggle, discrete model footer, removed API URL line.
     v1.3.0: VRAM co-residency fix — cap engine at GPU_MEMORY_UTILIZATION=0.45 + --kv-cache-memory-bytes 1GiB (was default 0.9, ~19.3 GiB, starving co-resident apps on the 24 GB worker GPU). TTS now ~11 GiB; runs alongside Voxtral Mini 3B ASR / Realtime with ~3-9 GiB headroom.

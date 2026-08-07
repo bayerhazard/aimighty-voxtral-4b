@@ -667,7 +667,7 @@ data:
           temperature: 0.0
           top_p: 1.0
           top_k: -1
-          max_tokens: 2048
+          max_tokens: 8192
           seed: 42
           detokenize: True
           repetition_penalty: 1.1
@@ -707,7 +707,7 @@ data:
           temperature: 0.9
           top_p: 0.8
           top_k: 40
-          max_tokens: 2048
+          max_tokens: 8192
           seed: 42
           detokenize: True
           repetition_penalty: 1.05
